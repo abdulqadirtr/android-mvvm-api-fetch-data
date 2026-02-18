@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,39 +30,79 @@ class PostViewModel @Inject constructor( private val postRepository: PostReposit
         loadPosts()
     }
 
+
+    // ✅ ADD THIS FUNCTION
+    fun getPostById(postId: Int): Post? {
+        return _uiState.value.posts.find { it.id == postId }
+    }
+
     fun loadPosts() {
         viewModelScope.launch {
 
-            postRepository.getPosts().collect { result ->
-                when (result) {
-                    is ErrorHandling.Success -> {
-                        // ✅ UI State holder - single source of truth
-                        _uiState.value = PostUiState(
-                            isLoading = false,
-                            posts = result.data,
-                            error = ""
-                        )
-
-                        _uiEvent.emit(UiEvent.ShowSnackbar("${result.data.size} posts loaded successfully"))
+            postRepository.getPosts()
+                .map { result ->
+                    when (result) {
+                        is ErrorHandling.Success -> {
+                            // ✅ UI State holder - single source of truth
+                            // Transform each post (e.g., uppercase titles)
+                            val transformedPosts = result.data.map { post ->
+                                post.copy(title = post.title.uppercase())
                             }
+                            PostUiState(
+                                isLoading = false,
+                                posts = transformedPosts,
+                                error = ""
+                            )
+                        }
 
-                    is ErrorHandling.Error -> {
-                        _uiState.value = PostUiState(
-                            isLoading = false,
-                            error = result.message
-                        )
-                        // ✅ Emit error event
-                        _uiEvent.emit(UiEvent.ShowSnackbar(result.message))
-                    }
+                        is ErrorHandling.Error -> {
+                            PostUiState(
+                                isLoading = false,
+                                error = result.message
+                            )
+                        }
 
-                    is ErrorHandling.Loading -> {
+                        is ErrorHandling.Loading -> {
 
-                        _uiState.value = PostUiState(isLoading = true)
+                            PostUiState(isLoading = true)
+                        }
                     }
-                    }
+                }.collect { uiState ->
+                    _uiState.value = uiState
                 }
 
-            }
+
+//            postRepository.getPosts()
+//                .collect { result ->
+//                when (result) {
+//                    is ErrorHandling.Success -> {
+//                        // ✅ UI State holder - single source of truth
+//                        _uiState.value = PostUiState(
+//                            isLoading = false,
+//                            posts = result.data,
+//                            error = ""
+//                        )
+//
+//                        _uiEvent.emit(UiEvent.ShowSnackbar("${result.data.size} posts loaded successfully"))
+//                            }
+//
+//                    is ErrorHandling.Error -> {
+//                        _uiState.value = PostUiState(
+//                            isLoading = false,
+//                            error = result.message
+//                        )
+//                        // ✅ Emit error event
+//                        _uiEvent.emit(UiEvent.ShowSnackbar(result.message))
+//                    }
+//
+//                    is ErrorHandling.Loading -> {
+//
+//                        _uiState.value = PostUiState(isLoading = true)
+//                    }
+//                    }
+//                }
+//
+          }
         }
 
 
