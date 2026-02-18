@@ -1,137 +1,70 @@
 ```markdown
-# 📱 Android MVVM Posts App
+# Android MVVM Posts App
 
-A modern Android application demonstrating **MVVM architecture** with **Jetpack Compose**, **Kotlin Coroutines**, and **Navigation Component**.
----
+A modern Android application demonstrating MVVM architecture with Jetpack Compose, Kotlin Coroutines, and Navigation Component.
 
-## ✨ Features
+## Features
 
-- ✅ MVVM Architecture
-- ✅ Jetpack Compose UI
-- ✅ Navigation Component with Arguments
-- ✅ Kotlin Coroutines & StateFlow
-- ✅ Sealed Classes for State Management
-- ✅ Hilt Dependency Injection
-- ✅ Retrofit API Integration
-- ✅ Error Handling with Retry
-- ✅ Material 3 Design
+- MVVM Architecture
+- Jetpack Compose UI
+- Navigation Component with Arguments
+- Kotlin Coroutines and StateFlow
+- Sealed Classes for State Management
+- Hilt Dependency Injection
+- Retrofit API Integration
+- Error Handling with Retry
+- Material 3 Design
 
----
+## Tech Stack
 
-## 🏗️ Architecture
+- Language: Kotlin
+- UI: Jetpack Compose
+- Architecture: MVVM
+- DI: Hilt
+- Networking: Retrofit + OkHttp
+- State: StateFlow
+- Navigation: Navigation Compose
 
-```
-┌─────────────────────────────┐
-│   Presentation Layer        │
-│   Screen → ViewModel → UI   │
-└──────────────┬──────────────┘
-               ↓
-┌─────────────────────────────┐
-│   Data Layer                │
-│   Repository → API Service  │
-└─────────────────────────────┘
-```
+## Project Structure
 
----
+- data/model/ - Data classes
+- data/network/ - API service
+- data/repository/ - Repository
+- ui/screens/posts/ - Posts list screen
+- ui/screens/detail/ - Post detail screen
+- ui/components/ - Reusable components
+- ui/navigation/ - Navigation setup
+- viewmodel/ - ViewModel
 
-## 📂 Project Structure
-
-```
-app/
-├── data/
-│   ├── model/Post.kt
-│   ├── network/ApiService.kt
-│   └── repository/PostRepository.kt
-├── ui/
-│   ├── screens/
-│   │   ├── posts/PostsScreen.kt
-│   │   └── detail/DetailScreen.kt
-│   ├── components/PostCard.kt
-│   └── navigation/AppNavigation.kt
-├── viewmodel/PostViewModel.kt
-└── MainActivity.kt
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technology |
-|----------|------------|
-| Language | Kotlin |
-| UI | Jetpack Compose |
-| Architecture | MVVM |
-| DI | Hilt |
-| Networking | Retrofit + OkHttp |
-| State | StateFlow |
-| Navigation | Navigation Compose |
-
----
-
-## 🚀 Getting Started
+## Getting Started
 
 1. Clone the repository
-```bash
-https://github.com/abdulqadirtr/android-mvvm-api-fetch-data.git
-```
-
 2. Open in Android Studio
-
 3. Sync Gradle and Run
 
----
+## API
 
-## 🔑 API
+Base URL: https://jsonplaceholder.typicode.com/
 
-**Base URL:** `https://jsonplaceholder.typicode.com/`
+- GET /posts - Fetch all posts
+- GET /posts/{id} - Fetch single post
 
-| Endpoint | Description |
-|----------|-------------|
-| GET /posts | Fetch all posts |
-| GET /posts/{id} | Fetch single post |
+## Screens
 
----
+Posts List: Displays all posts with click navigation to detail screen.
 
-## 📱 Screens
+Post Detail: Shows full post content with back navigation.
 
-### Posts List
-- Displays all posts
-- Click to navigate to detail
-- Error handling with retry
+## Key Implementations
 
-### Post Detail
-- Shows full post content
-- Back navigation
-- Receives postId via navigation argument
+State Management: Uses sealed interface for Loading, Empty, Success, and Error states.
 
----
+Navigation: Passes postId as route parameter between screens.
 
-## 🧩 Key Implementations
+Error Handling: Comprehensive error handling with retry functionality.
 
-### State Management
-```kotlin
-sealed interface PostsUiState {
-    data object Loading : PostsUiState
-    data object Empty : PostsUiState
-    data class Success(val posts: List<Post>) : PostsUiState
-    data class Error(val message: String) : PostsUiState
-}
-```
+## Author
 
-### Navigation
-```kotlin
-composable("detail/{postId}") { backStackEntry ->
-    val postId = backStackEntry.arguments?.getInt("postId") ?: 0
-    DetailScreen(postId = postId)
-}
-```
+Abdul Qadir
 
----
-
-## 👤 Author
-
-**Abdul Qadir**
-
-
-⭐ Star this repo if you found it helpful!
 ```
