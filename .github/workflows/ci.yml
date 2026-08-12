@@ -26,7 +26,7 @@ jobs:
         - name: Set up JDK 17
           uses: actions/setup-java@v4
           with:
-            version: 'java-version'
+            java-version: '17'
             distribution: 'temurin'
 # This is a tool built by the Gradle team. It configures your Android build system
 #  and remembers (caches)
