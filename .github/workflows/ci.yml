@@ -6,7 +6,7 @@ name: Android CI
 on:
   push:
     branches:
-      - main
+      - master
 # You are defining a single job named "build".
 jobs:
     build:
