@@ -39,5 +39,9 @@ jobs:
         - name: Grant execute permission for gradlew
           run: chmod +x gradlew
 
+    # ✅ THE NEW MAGIC: Run Unit Tests FIRST
+        - name: Run Local Unit Tests
+          run: ./gradlew testDebugUnitTest
+
         - name: Build Debug APK
           run: ./gradlew assembleDebug
